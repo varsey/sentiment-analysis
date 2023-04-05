@@ -1,18 +1,20 @@
+import os
+import cohere
 from fastapi import FastAPI
 from pydantic import BaseModel, conlist
-import cohere
 from cohere.responses.classify import Example
 
-co = cohere.Client('BcaCmnNYwSzrqhxN7wLUUDPuTu9iMGW6hZN9OPqZ')
+co = cohere.Client(os.environ['COHERE_KEY'])
 app = FastAPI()
+
 
 class ProductReviews(BaseModel):
     reviews: conlist(str, min_items=1)
 
-@app.post("/baselineprediction")
 
+@app.post("/baselineprediction")
 def predict_sentiment(product_reviews: ProductReviews):
-    # TODO add finetuned model from Finetuning Your Cohere Model:
+    # TO-DO add finetuned model from Finetuning Your Cohere Model:
     # https://txt.cohere.ai/deploying-sentiment-analysis-text-classifier-with-fastapi/
     response = co.classify(
         model='small',
